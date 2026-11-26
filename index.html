@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Império 2-A</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..900;1,9..144,500..900&family=Manrope:wght@400..800&display=swap">
+<style>
+/* Layout: vitrine clara sobre papel quadriculado de caderno; marca-texto amarelo no nome, escala de régua nos títulos, cartões brancos com fundos coloridos para cada produto. */
+:root{
+  --bg:#ffffff; --bg-soft:#f1f6ff; --sun-soft:#fff7d1;
+  --ink:#14213d; --muted:#53607a; --line:#d9e3f7;
+  --blue:#2f5bff; --blue-dk:#1d3fd1; --blue-tint:#dbe6ff;
+  --yellow:#ffc928; --yellow-tint:#fff0b8;
+  --coral:#ff5d73; --coral-tint:#ffdfe6;
+  --mint:#19b99a; --mint-dk:#0b7c68; --mint-tint:#d3f5ec;
+  --font-display:'Fraunces','Georgia','Times New Roman',serif;
+  --font-body:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --r:10px; --ease:cubic-bezier(.2,.7,.2,1);
+  color-scheme:light;
+}
+[hidden]{display:none!important}
+img{max-width:100%}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.65 var(--font-body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+a{color:inherit}
+h1,h2,h3,p,ul,blockquote{margin:0}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.wrap{width:100%;max-width:1200px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.ic{width:1.25em;height:1.25em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* Cabeçalho */
+.site-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;height:68px}
+.logo{font-family:var(--font-display);font-weight:800;font-size:1.55rem;letter-spacing:-.01em;text-decoration:none;color:var(--ink);white-space:nowrap}
+.logo b{font-weight:800;background:linear-gradient(transparent 58%,var(--yellow) 58% 92%,transparent 92%);padding:0 .1em}
+.nav{display:flex;align-items:center;gap:1.75rem}
+.nav a{position:relative;font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:.5rem 0;transition:color .25s}
+.nav a::after{content:"";position:absolute;left:0;right:0;bottom:.05rem;height:3px;border-radius:2px;background:var(--yellow);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.nav a:hover,.nav a[aria-current="true"]{color:var(--blue-dk)}
+.nav a:hover::after,.nav a[aria-current="true"]::after{transform:scaleX(1)}
+.actions{display:flex;align-items:center;gap:.6rem}
+.cart-btn,.menu-btn{position:relative;display:inline-flex;align-items:center;gap:.55rem;background:#fff;border:2px solid var(--line);color:var(--ink);padding:.5rem .85rem;border-radius:var(--r);font:700 .82rem/1 var(--font-body);cursor:pointer;transition:border-color .25s,background .25s}
+.cart-btn:hover,.menu-btn:hover{border-color:var(--blue);background:var(--blue-tint)}
+.menu-btn{display:none;padding:.5rem .65rem}
+.count{min-width:1.4rem;height:1.4rem;padding:0 .35rem;border-radius:999px;background:var(--coral);color:var(--ink);font-size:.74rem;font-weight:800;display:grid;place-items:center}
+@media (max-width:860px){
+  .menu-btn{display:inline-flex}
+  .nav{position:absolute;top:100%;left:0;right:0;display:none;flex-direction:column;align-items:stretch;gap:0;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 18px 30px -18px rgba(20,33,61,.3);padding:.4rem max(16px,env(safe-area-inset-right,0px)) 1rem max(16px,env(safe-area-inset-left,0px))}
+  .nav.open{display:flex}
+  .nav a{padding:.95rem 0;border-bottom:1px solid var(--line)}
+  .nav a::after{display:none}
+}
+@media (max-width:520px){.cart-label{display:none}.logo{font-size:1.25rem}}
+
+/* Botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;font:800 .85rem/1 var(--font-body);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:1rem 1.5rem;border-radius:var(--r);border:2px solid transparent;cursor:pointer;transition:transform .3s var(--ease),box-shadow .3s,background .3s,color .3s,border-color .3s}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 12px 24px -10px rgba(47,91,255,.7)}
+.btn-primary:hover{background:var(--blue-dk);transform:translateY(-2px);box-shadow:0 16px 28px -10px rgba(47,91,255,.8)}
+.btn-ghost{border-color:var(--blue);color:var(--blue-dk);background:#fff}
+.btn-ghost:hover{background:var(--blue-tint);transform:translateY(-2px)}
+.btn-buy{padding:.8rem 1.05rem;font-size:.74rem;background:var(--yellow);color:var(--ink);box-shadow:0 8px 16px -8px rgba(214,150,0,.9)}
+.btn-buy:hover{background:#ffd750;transform:translateY(-2px)}
+.btn-buy.done{background:var(--mint);color:#06382f}
+
+/* Hero */
+.hero{position:relative;isolation:isolate;overflow:hidden;padding-block:clamp(2.5rem,6vw,5rem);background:radial-gradient(circle at 88% 12%,rgba(255,201,40,.38),transparent 36%),radial-gradient(circle at 6% 92%,rgba(255,93,115,.2),transparent 34%),linear-gradient(180deg,#fff,var(--bg-soft))}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(47,91,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(47,91,255,.09) 1px,transparent 1px);background-size:36px 36px;-webkit-mask-image:radial-gradient(ellipse at 70% 40%,#000 15%,transparent 75%);mask-image:radial-gradient(ellipse at 70% 40%,#000 15%,transparent 75%)}
+.hero-grid{display:grid;gap:clamp(1.5rem,4vw,3rem);align-items:center}
+@media (min-width:900px){.hero-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}}
+.hero-copy{min-width:0}
+.eyebrow{display:inline-flex;align-items:center;gap:.75rem;font-size:.74rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--blue-dk)}
+.eyebrow::before{content:"";width:2rem;height:3px;border-radius:2px;background:var(--yellow)}
+.brand-title{margin:.5rem 0 1rem;font-family:var(--font-display);font-weight:900;font-size:clamp(2.8rem,7vw,5rem);line-height:1.05;letter-spacing:-.015em;color:var(--blue);text-wrap:balance}
+.hl{white-space:nowrap;color:var(--ink);padding:0 .12em;background:linear-gradient(transparent 58%,var(--yellow) 58% 92%,transparent 92%) left/100% 100% no-repeat;animation:swipe .9s var(--ease) .7s backwards}
+@keyframes swipe{from{background-size:0% 100%}}
+.slogan{font-family:var(--font-display);font-style:italic;font-weight:600;font-size:clamp(1.35rem,3.2vw,2rem);line-height:1.25;text-wrap:balance;margin-bottom:1.1rem;color:var(--ink)}
+.lead{color:var(--muted);max-width:52ch;font-size:1.05rem;margin-bottom:1.75rem}
+.cta-row{display:flex;flex-wrap:wrap;gap:.9rem}
+.perks{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;margin-top:2rem;padding:0;list-style:none;color:var(--muted);font-size:.9rem;font-weight:600}
+.perks li{display:inline-flex;align-items:center;gap:.5rem}
+.perks .ic{color:var(--mint-dk);stroke-width:2.4}
+.hero-art{width:100%;max-width:620px;justify-self:center;min-width:0}
+.hero-art svg{display:block;width:100%;height:auto}
+.rise{animation:rise .95s var(--ease) backwards;animation-delay:calc(var(--d,0) * 110ms)}
+.hero-art{animation:rise 1.2s var(--ease) .15s backwards}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
+.fl{animation:bob 9s ease-in-out infinite;animation-delay:var(--dl,0s)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.sh{filter:drop-shadow(0 14px 12px rgba(20,33,61,.22))}
+.spin{transform-box:fill-box;transform-origin:center;animation:spin 150s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tw{transform-box:fill-box;transform-origin:center;animation:tw 4s ease-in-out infinite;animation-delay:var(--dl,0s)}
+@keyframes tw{0%,100%{opacity:.5;transform:scale(.75)}50%{opacity:1;transform:scale(1)}}
+
+/* Seções */
+.section{padding-block:clamp(3.5rem,8vw,6rem)}
+.section.alt{background:var(--bg-soft);border-block:1px solid var(--line)}
+.section.sun{background:var(--sun-soft);border-block:1px solid #f4e3a0}
+.sec-head{max-width:640px;margin-bottom:clamp(1.75rem,4vw,3rem)}
+.sec-head h2,.about h2{margin:.9rem 0 0;font-family:var(--font-display);font-weight:800;font-size:clamp(2rem,5vw,3.1rem);line-height:1.1;letter-spacing:-.01em;text-wrap:balance}
+.sec-head p{color:var(--muted);margin-top:1.1rem}
+.scale{display:block;width:120px;height:13px;margin-top:1.1rem;border-bottom:2px solid var(--blue);background:repeating-linear-gradient(90deg,var(--blue) 0 1.5px,transparent 1.5px 6px) left bottom/100% 6px no-repeat,repeating-linear-gradient(90deg,var(--blue) 0 2px,transparent 2px 30px) left bottom/100% 12px no-repeat}
+.js .rv{translate:0 22px}
+.js .rv.in{translate:0 0}
+.rv{transition:translate .8s var(--ease) calc(var(--i,0) * 80ms)}
+
+/* Produtos */
+.filters{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.75rem}
+.chip{font:800 .76rem/1 var(--font-body);letter-spacing:.08em;text-transform:uppercase;padding:.8rem 1.1rem;border:2px solid var(--line);color:var(--muted);background:#fff;border-radius:999px;cursor:pointer;transition:background .25s,color .25s,border-color .25s}
+.chip:hover{border-color:var(--blue);color:var(--blue-dk)}
+.chip[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.grid{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr))}
+.card{display:flex;flex-direction:column;min-width:0;background:#fff;border:2px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 16px 30px -22px rgba(47,91,255,.5);transition:transform .35s var(--ease),border-color .3s,box-shadow .35s,translate .8s var(--ease) calc(var(--i,0) * 80ms)}
+.card:hover{transform:translateY(-6px);border-color:var(--blue);box-shadow:0 26px 40px -22px rgba(47,91,255,.55)}
+.tile{position:relative;aspect-ratio:5/4;display:grid;place-items:center;padding:.6rem;background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.8),transparent 62%),var(--tone,var(--blue-tint));overflow:hidden}
+.tile::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.65) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.65) 1px,transparent 1px);background-size:22px 22px}
+.tile svg{position:relative;height:100%;width:auto;aspect-ratio:1;max-width:100%;filter:drop-shadow(0 10px 10px rgba(20,33,61,.25));transition:transform .55s var(--ease)}
+.card:hover .tile svg{transform:scale(1.08) rotate(-3deg)}
+.tag{position:absolute;top:.8rem;left:.8rem;z-index:1;font-size:.66rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);background:#fff;padding:.32rem .65rem;border-radius:999px;box-shadow:0 4px 10px -4px rgba(20,33,61,.3)}
+.card-body{display:flex;flex-direction:column;gap:.5rem;flex:1;padding:1.15rem 1.15rem 1.25rem}
+.card h3{display:flex;align-items:center;gap:.55rem;font-family:var(--font-display);font-size:1.5rem;font-weight:800;line-height:1.2}
+.emo{font-size:1.15rem}
+.card-body p{flex:1;color:var(--muted);font-size:.92rem}
+.buy{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-top:.75rem}
+.price{font-family:var(--font-display);font-weight:900;font-size:1.6rem;line-height:1.1;color:var(--blue-dk);font-variant-numeric:tabular-nums}
+.price small{display:block;font:700 .64rem/1.4 var(--font-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* Categorias */
+.cats{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.cat{display:flex;flex-direction:column;gap:1rem;min-width:0;padding:1.75rem;border:2px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 16px 30px -24px rgba(47,91,255,.5);transition:transform .35s var(--ease),border-color .3s,translate .8s var(--ease) calc(var(--i,0) * 80ms)}
+.cat:hover{transform:translateY(-4px);border-color:var(--blue)}
+.cat-ic{width:3.4rem;height:3.4rem;display:grid;place-items:center;border-radius:14px;background:var(--tint,var(--blue-tint));color:var(--ink)}
+.cat-ic .ic{width:1.6rem;height:1.6rem}
+.cat h3{font-family:var(--font-display);font-size:1.5rem;font-weight:800;line-height:1.2}
+.cat>p{color:var(--muted);font-size:.95rem}
+.cat ul{list-style:none;padding:0;display:grid}
+.cat li{display:flex;justify-content:space-between;gap:1rem;padding:.7rem 0;border-top:1px solid var(--line);font-size:.95rem;font-weight:600}
+.cat li span:last-child{color:var(--blue-dk);font-weight:800;font-variant-numeric:tabular-nums}
+.link-btn{margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:.5rem;background:none;border:0;border-bottom:3px solid var(--yellow);padding:.35rem 0;color:var(--blue-dk);font:800 .78rem/1 var(--font-body);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.link-btn:hover{color:var(--ink)}
+
+/* Sobre */
+.about{display:grid;gap:clamp(2rem,5vw,4rem);align-items:start}
+@media (min-width:900px){.about{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}}
+.about-copy{min-width:0}
+.about-copy>p{color:var(--muted);margin-top:1.25rem;max-width:56ch}
+.about-copy blockquote{margin-top:2rem;font-family:var(--font-display);font-style:italic;font-weight:600;font-size:clamp(1.3rem,3vw,1.75rem);line-height:1.35;color:var(--blue);max-width:30ch;text-wrap:balance}
+.pillars{display:grid;gap:1rem;min-width:0}
+.pillar{display:grid;grid-template-columns:auto minmax(0,1fr);gap:1.1rem;align-items:center;padding:1.25rem;border:2px solid var(--line);border-radius:16px;background:#fff}
+.pillar h3{font-family:var(--font-display);font-size:1.3rem;font-weight:800;line-height:1.2;margin-bottom:.25rem}
+.pillar p{color:var(--muted);font-size:.95rem}
+
+/* Contato */
+.contact-grid{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.ct{display:flex;flex-direction:column;gap:.7rem;min-width:0;padding:1.75rem;border:2px solid #f0dd91;border-radius:16px;background:#fff;transition:translate .8s var(--ease) calc(var(--i,0) * 80ms)}
+.ct .eyebrow::before{display:none}
+.ct h3{font-family:var(--font-display);font-weight:800;font-size:1.45rem;line-height:1.25;overflow-wrap:anywhere;user-select:all}
+.ct p{color:var(--muted);font-size:.95rem}
+.ct .btn{margin-top:auto;align-self:flex-start}
+.ct .cat-ic{margin-bottom:.3rem}
+
+/* Rodapé */
+.foot{padding-block:2.5rem;background:var(--bg-soft);border-top:1px solid var(--line)}
+.foot-grid{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1.25rem 2rem}
+.foot p{color:var(--muted);font-size:.88rem}
+.foot nav{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem}
+.foot nav a{font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.foot nav a:hover{color:var(--blue-dk)}
+.foot-copy{width:100%;padding-top:1.25rem;border-top:1px solid var(--line)}
+
+/* Sacola */
+.scrim{position:fixed;inset:0;z-index:70;background:rgba(20,33,61,.45);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.scrim.open{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:80;width:min(100%,420px);display:flex;flex-direction:column;background:#fff;border-left:2px solid var(--line);box-shadow:-20px 0 40px -24px rgba(20,33,61,.4);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px);transform:translateX(100%);visibility:hidden;transition:transform .45s var(--ease),visibility .45s}
+.drawer.open{transform:none;visibility:visible}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.25rem}
+.drawer-head h2{font-family:var(--font-display);font-weight:800;font-size:1.6rem}
+.icon-btn{display:grid;place-items:center;width:2.5rem;height:2.5rem;background:#fff;border:2px solid var(--line);border-radius:var(--r);color:var(--ink);cursor:pointer}
+.icon-btn:hover{border-color:var(--blue);background:var(--blue-tint)}
+.drawer-body{flex:1;overflow:auto;padding:0 1.25rem}
+.items{list-style:none;padding:0}
+.line{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"info total" "qty .";gap:.6rem 1rem;align-items:center;padding:1rem 0;border-top:1px solid var(--line)}
+.line-info{grid-area:info;display:grid}
+.line-info span{color:var(--muted);font-size:.85rem}
+.line-total{grid-area:total;font-family:var(--font-display);font-weight:900;color:var(--blue-dk);font-variant-numeric:tabular-nums}
+.qty{grid-area:qty;display:inline-flex;align-items:center;border:2px solid var(--line);border-radius:var(--r);justify-self:start}
+.qty button{width:2.25rem;height:2.25rem;background:transparent;border:0;color:var(--ink);font:800 1.1rem/1 var(--font-body);cursor:pointer}
+.qty button:hover{color:var(--blue-dk)}
+.qty output{min-width:2rem;text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+.empty{display:grid;gap:1rem;justify-items:start;padding:1rem 0 2rem;color:var(--muted)}
+.drawer-foot{padding:1.25rem;border-top:2px solid var(--line);display:grid;gap:1rem;background:var(--bg-soft)}
+.total{display:flex;justify-content:space-between;align-items:baseline;font-weight:700}
+.total strong{font-family:var(--font-display);font-weight:900;font-size:1.7rem;color:var(--blue-dk);font-variant-numeric:tabular-nums}
+.drawer-foot .btn{width:100%}
+.drawer-foot .btn[aria-disabled="true"]{opacity:.45;pointer-events:none;box-shadow:none}
+.drawer-foot small{color:var(--muted);font-size:.8rem}
+.toast{position:fixed;left:50%;bottom:calc(1.25rem + env(safe-area-inset-bottom,0px));z-index:90;max-width:calc(100% - 32px);padding:.8rem 1.1rem;border-radius:var(--r);background:var(--ink);color:#fff;font-weight:700;font-size:.9rem;opacity:0;transform:translate(-50%,16px);pointer-events:none;transition:opacity .3s,transform .4s var(--ease)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="gYellow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe680"/><stop offset=".45" stop-color="#ffc928"/><stop offset="1" stop-color="#e5a200"/></linearGradient>
+    <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a8dff"/><stop offset=".5" stop-color="#2f5bff"/><stop offset="1" stop-color="#1c3bc4"/></linearGradient>
+    <linearGradient id="gCoralH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#de3a52"/><stop offset=".5" stop-color="#ff6e82"/><stop offset="1" stop-color="#e84760"/></linearGradient>
+    <linearGradient id="gCoral" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff94a3"/><stop offset=".5" stop-color="#ff5d73"/><stop offset="1" stop-color="#de3a52"/></linearGradient>
+    <linearGradient id="gPink" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd3dc"/><stop offset="1" stop-color="#ff93a8"/></linearGradient>
+    <linearGradient id="gMint" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7be8d2"/><stop offset=".5" stop-color="#19b99a"/><stop offset="1" stop-color="#0f8f77"/></linearGradient>
+    <linearGradient id="gSilver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#c3cbdc"/><stop offset="1" stop-color="#8793ab"/></linearGradient>
+    <linearGradient id="gNavy" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c3c6b"/><stop offset="1" stop-color="#14213d"/></linearGradient>
+    <linearGradient id="gWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdebcc"/><stop offset="1" stop-color="#e3b06f"/></linearGradient>
+    <radialGradient id="gGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffc928" stop-opacity=".5"/><stop offset="1" stop-color="#ffc928" stop-opacity="0"/></radialGradient>
+  </defs>
+
+  <symbol id="i-pencil" viewBox="0 0 200 200">
+    <g transform="rotate(-35 100 100)">
+      <rect x="26" y="89" width="18" height="22" rx="5" fill="url(#gCoral)"/>
+      <rect x="42" y="89" width="14" height="22" fill="url(#gSilver)"/>
+      <path d="M46 89v22M50 89v22M54 89v22" stroke="#6f7b95" stroke-width=".8" opacity=".7"/>
+      <rect x="56" y="89" width="84" height="22" fill="url(#gYellow)"/>
+      <rect x="56" y="93" width="84" height="2.5" fill="#fff" opacity=".5"/>
+      <rect x="56" y="104" width="84" height="7" fill="#000" opacity=".12"/>
+      <path d="M56 100H140" stroke="#000" stroke-width=".6" opacity=".15"/>
+      <text x="98" y="103" text-anchor="middle" font-family="Manrope, sans-serif" font-size="6" font-weight="800" letter-spacing="1" fill="#14213d">IMPÉRIO 2-A</text>
+      <polygon points="140,89 176,100 140,111" fill="url(#gWood)"/>
+      <polygon points="140,89 176,100 140,100" fill="#fff" opacity=".3"/>
+      <polygon points="167.6,97.4 176,100 167.6,102.6" fill="#14213d"/>
+    </g>
+  </symbol>
+
+  <symbol id="i-eraser" viewBox="0 0 200 200">
+    <g transform="rotate(-14 100 100)">
+      <ellipse cx="64" cy="146" rx="4" ry="2.2" fill="#ffb3c2" transform="rotate(20 64 146)"/>
+      <ellipse cx="78" cy="152" rx="3" ry="1.8" fill="#ffc9d4" transform="rotate(-15 78 152)"/>
+      <ellipse cx="52" cy="152" rx="2.4" ry="1.5" fill="#ffa6b8"/>
+      <rect x="42" y="72" width="116" height="56" rx="9" fill="url(#gPink)"/>
+      <path d="M96 72H149a9 9 0 0 1 9 9V119a9 9 0 0 1-9 9H96Z" fill="url(#gBlue)"/>
+      <rect x="96" y="72" width="3" height="56" fill="#ffc928"/>
+      <rect x="42" y="72" width="116" height="56" rx="9" fill="none" stroke="#14213d" stroke-opacity=".18"/>
+      <text x="128" y="104" text-anchor="middle" font-family="Manrope, sans-serif" font-size="6" font-weight="800" letter-spacing=".7" fill="#ffffff">IMPÉRIO 2-A</text>
+    </g>
+  </symbol>
+
+  <symbol id="i-ruler" viewBox="0 0 200 200">
+    <g transform="rotate(-20 100 100)">
+      <rect x="14" y="76" width="172" height="48" rx="4" fill="url(#gMint)"/>
+      <path d="M14 116H186V120a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4Z" fill="url(#gYellow)"/>
+      <rect x="14" y="76" width="172" height="48" rx="4" fill="none" stroke="#0f8f77" stroke-width="1.2"/>
+      <line x1="24.5" y1="79.5" x2="175.5" y2="79.5" stroke="#14213d" stroke-width="7" stroke-dasharray="1 5"/>
+      <line x1="24.5" y1="83" x2="175.5" y2="83" stroke="#14213d" stroke-width="14" stroke-dasharray="1.3 28.7"/>
+      <g font-family="Manrope, sans-serif" font-size="9" font-weight="800" fill="#14213d" text-anchor="middle">
+        <text x="25" y="103">0</text><text x="55" y="103">1</text><text x="85" y="103">2</text><text x="115" y="103">3</text><text x="145" y="103">4</text><text x="175" y="103">5</text>
+      </g>
+      <text x="100" y="112.5" text-anchor="middle" font-family="Manrope, sans-serif" font-size="7" font-weight="800" letter-spacing="2" fill="#0b4a3f">IMPÉRIO 2-A</text>
+    </g>
+  </symbol>
+
+  <symbol id="i-pen" viewBox="0 0 200 200">
+    <g transform="rotate(34 100 100)">
+      <rect x="24" y="91" width="46" height="18" rx="9" fill="url(#gNavy)"/>
+      <rect x="36" y="85.5" width="4" height="8" rx="1.5" fill="url(#gYellow)"/>
+      <rect x="38" y="85.5" width="48" height="3.2" rx="1.6" fill="url(#gYellow)"/>
+      <rect x="68" y="89.5" width="5" height="21" rx="1.5" fill="url(#gYellow)"/>
+      <rect x="73" y="91.5" width="56" height="17" fill="url(#gBlue)"/>
+      <rect x="73" y="93.5" width="56" height="2.4" fill="#fff" opacity=".35"/>
+      <rect x="73" y="102" width="56" height="6.5" fill="#000" opacity=".12"/>
+      <text x="101" y="103.6" text-anchor="middle" font-family="Manrope, sans-serif" font-size="5.2" font-weight="800" letter-spacing=".6" fill="#ffffff">IMPÉRIO 2-A</text>
+      <rect x="129" y="89.5" width="4" height="21" rx="1.5" fill="url(#gYellow)"/>
+      <rect x="133" y="92" width="22" height="16" fill="url(#gNavy)"/>
+      <path d="M138 92v16M142 92v16M146 92v16M150 92v16" stroke="#fff" stroke-opacity=".35" stroke-width=".8"/>
+      <polygon points="155,93.5 172,98.5 172,101.5 155,106.5" fill="url(#gYellow)"/>
+      <rect x="172" y="98.8" width="7" height="2.4" rx="1.2" fill="#9aa6bf"/>
+    </g>
+  </symbol>
+
+  <symbol id="ic-cart" viewBox="0 0 24 24"><path d="M3 4h2l2.4 11h10.2L20 7H6.2"/><circle cx="9" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/></symbol>
+  <symbol id="ic-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="ic-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="ic-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="ic-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="ic-pencil" viewBox="0 0 24 24"><path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19l-4 1z"/><path d="M14.5 6.5l3 3"/></symbol>
+  <symbol id="ic-ruler" viewBox="0 0 24 24"><rect x="2.5" y="8" width="19" height="8" rx="1"/><path d="M6 8v3M9.5 8v4.5M13 8v3M16.5 8v4.5"/></symbol>
+  <symbol id="ic-bag" viewBox="0 0 24 24"><path d="M9 7V6a3 3 0 0 1 6 0v1"/><rect x="5" y="7" width="14" height="14" rx="3"/><path d="M9 13h6M9 16.5h6"/></symbol>
+  <symbol id="ic-star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></symbol>
+  <symbol id="ic-bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="ic-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.2"/></symbol>
+  <symbol id="ic-whats" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-11.8 7L4 20l1.1-4.1A8 8 0 1 1 20 12z"/><path d="M9.5 9.5c0 3 2 5 5 5l1-1.5-2-1-1 .8c-.8-.4-1.5-1.1-1.9-1.9l.8-1-1-2z"/></symbol>
+  <symbol id="ic-insta" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r=".8" fill="currentColor"/></symbol>
+  <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5a7 7 0 1 0-14 0C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+</svg>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="logo" href="#inicio" aria-label="Império 2-A, início">Império <b>2-A</b></a>
+    <nav class="nav" id="nav" aria-label="Menu principal">
+      <a href="#inicio">Início</a>
+      <a href="#produtos">Produtos</a>
+      <a href="#categorias">Categorias</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <div class="actions">
+      <button class="cart-btn" id="cart-btn" type="button" aria-label="Abrir sacola">
+        <svg class="ic" aria-hidden="true"><use href="#ic-cart"/></svg>
+        <span class="cart-label">Sacola</span>
+        <span class="count" id="cart-count" hidden>0</span>
+      </button>
+      <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Abrir menu">
+        <svg class="ic" aria-hidden="true"><use href="#ic-menu"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="inicio" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow rise" style="--d:0">Materiais didáticos e escolares</span>
+        <h1 class="brand-title rise" id="hero-title" style="--d:1">Império <span class="hl">2-A</span></h1>
+        <p class="slogan rise" style="--d:2">Tudo o que você precisa para aprender!</p>
+        <p class="lead rise" style="--d:3">Lápis, canetas, réguas e borrachas escolhidos para o dia a dia de estudantes, professores e escolas, com qualidade, praticidade e preço justo.</p>
+        <div class="cta-row rise" style="--d:4">
+          <a class="btn btn-primary" href="#produtos">Conheça nossos produtos <svg class="ic" aria-hidden="true"><use href="#ic-arrow"/></svg></a>
+          <a class="btn btn-ghost" href="#contato">Fale conosco</a>
+        </div>
+        <ul class="perks rise" style="--d:5">
+          <li><svg class="ic" aria-hidden="true"><use href="#ic-check"/></svg>Qualidade</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#ic-check"/></svg>Praticidade</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#ic-check"/></svg>Bons preços</li>
+        </ul>
+      </div>
+
+      <div class="hero-art">
+        <svg viewBox="0 0 640 560" role="img" aria-label="Materiais escolares do Império 2-A: caderno, lápis, caneta, régua e borracha">
+          <circle cx="320" cy="280" r="275" fill="url(#gGlow)"/>
+          <g class="spin">
+            <circle cx="320" cy="280" r="250" fill="none" stroke="#2f5bff" stroke-opacity=".32" stroke-width="10" stroke-dasharray="1.2 7.5266"/>
+            <circle cx="320" cy="280" r="250" fill="none" stroke="#ff5d73" stroke-opacity=".7" stroke-width="18" stroke-dasharray="1.6 42.033"/>
+            <circle cx="320" cy="280" r="232" fill="none" stroke="#2f5bff" stroke-opacity=".25"/>
+          </g>
+
+          <g class="fl" style="--dl:-1s"><g class="sh">
+            <g transform="translate(150 120) rotate(-6)">
+              <rect x="9" y="9" width="250" height="330" rx="10" fill="#c9d6f2"/>
+              <rect x="5" y="5" width="250" height="330" rx="10" fill="#ffffff" stroke="#c9d6f2"/>
+              <rect width="250" height="330" rx="10" fill="url(#gBlue)"/>
+              <rect x="18" y="18" width="214" height="294" rx="4" fill="none" stroke="#fff" stroke-opacity=".55" stroke-dasharray="3 5"/>
+              <path d="M10 0H28V330H10A10 10 0 0 1 0 320V10A10 10 0 0 1 10 0Z" fill="url(#gCoralH)"/>
+              <rect x="208" y="0" width="14" height="330" fill="#ffc928"/>
+              <path d="M208 0V330M222 0V330" stroke="#e5a200" stroke-opacity=".7"/>
+              <g transform="translate(118 165)" text-anchor="middle">
+                <rect x="-62" y="-46" width="124" height="92" rx="8" fill="#ffffff"/>
+                <text y="-6" font-family="Fraunces, Georgia, serif" font-weight="900" font-size="18" letter-spacing=".5" fill="#2f5bff">IMPÉRIO</text>
+                <path d="M-36 4H36" stroke="#2f5bff" stroke-opacity=".4"/>
+                <rect x="-28" y="12" width="56" height="26" rx="3" fill="#ffc928"/>
+                <text y="32" font-family="Fraunces, Georgia, serif" font-weight="900" font-size="24" letter-spacing="2" fill="#14213d">2-A</text>
+              </g>
+            </g>
+          </g></g>
+
+          <g class="fl" style="--dl:-4s"><g class="sh"><use href="#i-eraser" x="30" y="105" width="200" height="200"/></g></g>
+          <g class="fl" style="--dl:-2.5s"><g class="sh"><use href="#i-pencil" x="300" y="10" width="340" height="340"/></g></g>
+          <g class="fl" style="--dl:-6s"><g class="sh"><use href="#i-ruler" x="335" y="300" width="300" height="300"/></g></g>
+          <g class="fl" style="--dl:-3.5s"><g class="sh"><use href="#i-pen" x="25" y="300" width="330" height="330"/></g></g>
+
+          <g>
+            <g transform="translate(88 78)" fill="#ffc928"><path class="tw" d="M0-12L3-3 12 0 3 3 0 12-3 3-12 0-3-3Z"/></g>
+            <g transform="translate(566 66)" fill="#ff5d73"><path class="tw" style="--dl:-1.5s" d="M0-12L3-3 12 0 3 3 0 12-3 3-12 0-3-3Z"/></g>
+            <g transform="translate(606 318) scale(.7)" fill="#2f5bff"><path class="tw" style="--dl:-2.5s" d="M0-12L3-3 12 0 3 3 0 12-3 3-12 0-3-3Z"/></g>
+            <g transform="translate(40 330) scale(.7)" fill="#19b99a"><path class="tw" style="--dl:-3s" d="M0-12L3-3 12 0 3 3 0 12-3 3-12 0-3-3Z"/></g>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="produtos" aria-labelledby="produtos-title">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">Catálogo</span>
+        <h2 id="produtos-title">Nossos produtos</h2>
+        <span class="scale" aria-hidden="true"></span>
+        <p>Escolha o item, coloque na sacola e finalize o pedido pelo WhatsApp.</p>
+      </div>
+
+      <div class="filters rv" role="group" aria-label="Filtrar produtos por categoria">
+        <button class="chip" type="button" data-filter="todos" aria-pressed="true">Todos</button>
+        <button class="chip" type="button" data-filter="escrita" aria-pressed="false">Escrita</button>
+        <button class="chip" type="button" data-filter="medicao" aria-pressed="false">Medição</button>
+        <button class="chip" type="button" data-filter="acessorios" aria-pressed="false">Acessórios</button>
+      </div>
+
+      <div class="grid">
+        <article class="card rv" style="--i:0" data-id="lapis" data-name="Lápis" data-price="1.50" data-cat="escrita">
+          <div class="tile" style="--tone:#d9e4ff">
+            <span class="tag">Escrita</span>
+            <svg viewBox="0 0 200 200" role="img" aria-label="Ilustração de um lápis amarelo"><use href="#i-pencil"/></svg>
+          </div>
+          <div class="card-body">
+            <h3><span class="emo" aria-hidden="true">✏️</span>Lápis</h3>
+            <p>Grafite macio e resistente, ideal para escrever, desenhar e fazer anotações.</p>
+            <div class="buy">
+              <div class="price"><small>Unidade</small>R$ 1,50</div>
+              <button class="btn btn-buy" type="button" data-add><svg class="ic" aria-hidden="true"><use href="#ic-cart"/></svg><span>Comprar</span></button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card rv" style="--i:1" data-id="borracha" data-name="Borracha" data-price="1.35" data-cat="acessorios">
+          <div class="tile" style="--tone:#fff0b8">
+            <span class="tag">Acessório</span>
+            <svg viewBox="0 0 200 200" role="img" aria-label="Ilustração de uma borracha rosa com capa azul"><use href="#i-eraser"/></svg>
+          </div>
+          <div class="card-body">
+            <h3><span class="emo" aria-hidden="true">🧽</span>Borracha</h3>
+            <p>Apaga sem manchar e sem rasgar o papel, com capa protetora que mantém o uso limpo.</p>
+            <div class="buy">
+              <div class="price"><small>Unidade</small>R$ 1,35</div>
+              <button class="btn btn-buy" type="button" data-add><svg class="ic" aria-hidden="true"><use href="#ic-cart"/></svg><span>Comprar</span></button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card rv" style="--i:2" data-id="regua" data-name="Régua" data-price="3.00" data-cat="medicao">
+          <div class="tile" style="--tone:#ffdfe6">
+            <span class="tag">Medição</span>
+            <svg viewBox="0 0 200 200" role="img" aria-label="Ilustração de uma régua verde com escala em centímetros"><use href="#i-ruler"/></svg>
+          </div>
+          <div class="card-body">
+            <h3><span class="emo" aria-hidden="true">📏</span>Régua</h3>
+            <p>Régua de 30 cm com escala nítida em centímetros e milímetros, para traços retos e medidas precisas.</p>
+            <div class="buy">
+              <div class="price"><small>Unidade</small>R$ 3,00</div>
+              <button class="btn btn-buy" type="button" data-add><svg class="ic" aria-hidden="true"><use href="#ic-cart"/></svg><span>Comprar</span></button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card rv" style="--i:3" data-id="caneta" data-name="Caneta" data-price="2.50" data-cat="escrita">
+          <div class="tile" style="--tone:#d3f5ec">
+            <span class="tag">Escrita</span>
+            <svg viewBox="0 0 200 200" role="img" aria-label="Ilustração de uma caneta esferográfica azul"><use href="#i-pen"/></svg>
+          </div>
+          <div class="card-body">
+            <h3><span class="emo" aria-hidden="true">🖊️</span>Caneta</h3>
+            <p>Escrita suave e contínua, com tinta de secagem rápida para o dia inteiro de aula.</p>
+            <div class="buy">
+              <div class="price"><small>Unidade</small>R$ 2,50</div>
+              <button class="btn btn-buy" type="button" data-add><svg class="ic" aria-hidden="true"><use href="#ic-cart"/></svg><span>Comprar</span></button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="categorias" aria-labelledby="categorias-title">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">Organização</span>
+        <h2 id="categorias-title">Categorias</h2>
+        <span class="scale" aria-hidden="true"></span>
+        <p>Os produtos reunidos por tipo de uso, para você encontrar o que precisa mais rápido.</p>
+      </div>
+
+      <div class="cats">
+        <article class="cat rv" style="--i:0">
+          <div class="cat-ic" style="--tint:#fff0b8"><svg class="ic" aria-hidden="true"><use href="#ic-pencil"/></svg></div>
+          <h3>Materiais de escrita</h3>
+          <p>Para escrever, desenhar e fazer anotações em qualquer matéria.</p>
+          <ul>
+            <li><span>✏️ Lápis</span><span>R$ 1,50</span></li>
+            <li><span>🖊️ Caneta</span><span>R$ 2,50</span></li>
+          </ul>
+          <button class="link-btn" type="button" data-go="escrita">Ver produtos <svg class="ic" aria-hidden="true"><use href="#ic-arrow"/></svg></button>
+        </article>
+
+        <article class="cat rv" style="--i:1">
+          <div class="cat-ic" style="--tint:#d3f5ec"><svg class="ic" aria-hidden="true"><use href="#ic-ruler"/></svg></div>
+          <h3>Materiais de medição</h3>
+          <p>Para traçar linhas retas e medir com precisão em trabalhos e provas.</p>
+          <ul>
+            <li><span>📏 Régua</span><span>R$ 3,00</span></li>
+          </ul>
+          <button class="link-btn" type="button" data-go="medicao">Ver produtos <svg class="ic" aria-hidden="true"><use href="#ic-arrow"/></svg></button>
+        </article>
+
+        <article class="cat rv" style="--i:2">
+          <div class="cat-ic" style="--tint:#ffdfe6"><svg class="ic" aria-hidden="true"><use href="#ic-bag"/></svg></div>
+          <h3>Acessórios escolares</h3>
+          <p>Para corrigir erros e completar o estojo do estudante.</p>
+          <ul>
+            <li><span>🧽 Borracha</span><span>R$ 1,35</span></li>
+          </ul>
+          <button class="link-btn" type="button" data-go="acessorios">Ver produtos <svg class="ic" aria-hidden="true"><use href="#ic-arrow"/></svg></button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="sobre" aria-labelledby="sobre-title">
+    <div class="wrap about">
+      <div class="about-copy rv">
+        <span class="eyebrow">Sobre o Império 2-A</span>
+        <h2 id="sobre-title">Especializada em materiais didáticos e escolares</h2>
+        <span class="scale" aria-hidden="true"></span>
+        <p>O Império 2-A é uma loja dedicada a materiais didáticos e escolares. Reunimos os itens essenciais para a sala de aula e para o estudo em casa, escolhidos pela durabilidade e pelo bom desempenho no uso diário.</p>
+        <p>Nosso compromisso é simples: oferecer qualidade, praticidade e bons preços para que aprender fique mais fácil para estudantes, famílias e escolas.</p>
+        <blockquote>Aprender fica mais fácil com o material certo nas mãos.</blockquote>
+      </div>
+
+      <div class="pillars">
+        <div class="pillar rv" style="--i:0">
+          <div class="cat-ic" style="--tint:#fff0b8"><svg class="ic" aria-hidden="true"><use href="#ic-star"/></svg></div>
+          <div><h3>Qualidade</h3><p>Produtos selecionados para durar o ano letivo inteiro.</p></div>
+        </div>
+        <div class="pillar rv" style="--i:1">
+          <div class="cat-ic" style="--tint:#dbe6ff"><svg class="ic" aria-hidden="true"><use href="#ic-bolt"/></svg></div>
+          <div><h3>Praticidade</h3><p>Compra rápida, com o pedido combinado direto pelo WhatsApp.</p></div>
+        </div>
+        <div class="pillar rv" style="--i:2">
+          <div class="cat-ic" style="--tint:#ffdfe6"><svg class="ic" aria-hidden="true"><use href="#ic-tag"/></svg></div>
+          <div><h3>Bons preços</h3><p>Valores justos para quem estuda, para as famílias e para as escolas.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section sun" id="contato" aria-labelledby="contato-title">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">Atendimento</span>
+        <h2 id="contato-title">Fale com o Império 2-A</h2>
+        <span class="scale" aria-hidden="true"></span>
+        <p>Tire dúvidas, faça seu pedido ou visite a loja.</p>
+      </div>
+
+      <div class="contact-grid">
+        <article class="ct rv" style="--i:0">
+          <div class="cat-ic" style="--tint:#d3f5ec"><svg class="ic" aria-hidden="true"><use href="#ic-whats"/></svg></div>
+          <span class="eyebrow">WhatsApp</span>
+          <h3>(00) 90000-0000</h3>
+          <p>Pedidos, preços e disponibilidade, com resposta rápida.</p>
+          <a class="btn btn-primary" id="wa-link" href="https://wa.me/5500900000000" target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>
+        </article>
+
+        <article class="ct rv" style="--i:1">
+          <div class="cat-ic" style="--tint:#ffdfe6"><svg class="ic" aria-hidden="true"><use href="#ic-insta"/></svg></div>
+          <span class="eyebrow">Instagram</span>
+          <h3>@imperio2a</h3>
+          <p>Novidades, lançamentos e dicas para o seu material escolar.</p>
+          <a class="btn btn-ghost" href="https://www.instagram.com/imperio2a" target="_blank" rel="noopener noreferrer">Seguir no Instagram</a>
+        </article>
+
+        <article class="ct rv" style="--i:2">
+          <div class="cat-ic" style="--tint:#dbe6ff"><svg class="ic" aria-hidden="true"><use href="#ic-pin"/></svg></div>
+          <span class="eyebrow">Endereço da loja</span>
+          <h3>Rua das Letras, 123, Centro<br>Sua Cidade, UF</h3>
+          <p>Venha conhecer todos os materiais de perto.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-grid">
+    <div>
+      <a class="logo" href="#inicio" aria-label="Império 2-A, voltar ao início">Império <b>2-A</b></a>
+      <p>Tudo o que você precisa para aprender!</p>
+    </div>
+    <nav aria-label="Rodapé">
+      <a href="#produtos">Produtos</a>
+      <a href="#categorias">Categorias</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <p class="foot-copy">© 2026 Império 2-A. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
+  <div class="drawer-head">
+    <h2 id="cart-title">Sua sacola</h2>
+    <button class="icon-btn" id="cart-close" type="button" aria-label="Fechar sacola"><svg class="ic" aria-hidden="true"><use href="#ic-close"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div class="empty" id="cart-empty">
+      <p>Sua sacola está vazia. Adicione produtos para montar o pedido.</p>
+      <button class="link-btn" type="button" id="cart-shop">Ver produtos <svg class="ic" aria-hidden="true"><use href="#ic-arrow"/></svg></button>
+    </div>
+    <ul class="items" id="cart-items" hidden></ul>
+  </div>
+  <div class="drawer-foot">
+    <div class="total"><span>Total</span><strong id="cart-total">R$ 0,00</strong></div>
+    <a class="btn btn-primary" id="checkout" aria-disabled="true" target="_blank" rel="noopener noreferrer"><svg class="ic" aria-hidden="true"><use href="#ic-whats"/></svg>Finalizar pelo WhatsApp</a>
+    <small>O pedido é combinado com a loja pelo WhatsApp.</small>
+  </div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  var doc = document, root = doc.documentElement;
+  root.classList.add('js');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+  function $(s, c) { return (c || doc).querySelector(s); }
+  function $$(s, c) { return Array.prototype.slice.call((c || doc).querySelectorAll(s)); }
+
+  /* Entrada suave das seções ao rolar */
+  var rv = $$('.rv');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    rv.forEach(function (el) { io.observe(el); });
+  } else {
+    rv.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  /* Link ativo no menu */
+  var links = $$('.nav a[href^="#"]');
+  var secs = links.map(function (a) { return $(a.getAttribute('href')); }).filter(Boolean);
+  if ('IntersectionObserver' in window) {
+    var so = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) {
+          links.forEach(function (a) {
+            a.setAttribute('aria-current', a.getAttribute('href') === '#' + e.target.id ? 'true' : 'false');
+          });
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    secs.forEach(function (s) { so.observe(s); });
+  }
+
+  /* Menu no celular */
+  var nav = $('#nav'), mb = $('#menu-btn');
+  mb.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    mb.setAttribute('aria-expanded', String(open));
+  });
+  nav.addEventListener('click', function (e) {
+    if (e.target.closest('a')) { nav.classList.remove('open'); mb.setAttribute('aria-expanded', 'false'); }
+  });
+
+  /* Filtro de produtos */
+  var chips = $$('.chip'), cards = $$('.card[data-id]');
+  function setFilter(f) {
+    chips.forEach(function (c) { c.setAttribute('aria-pressed', String(c.dataset.filter === f)); });
+    cards.forEach(function (card) { card.hidden = !(f === 'todos' || card.dataset.cat === f); });
+  }
+  chips.forEach(function (c) { c.addEventListener('click', function () { setFilter(c.dataset.filter); }); });
+  function goProducts() { $('#produtos').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }
+  $$('[data-go]').forEach(function (b) {
+    b.addEventListener('click', function () { setFilter(b.dataset.go); goProducts(); });
+  });
+
+  /* Sacola */
+  var cart = {}, order = [];
+  var drawer = $('#drawer'), scrim = $('#scrim'), list = $('#cart-items'), empty = $('#cart-empty');
+  var totalEl = $('#cart-total'), badge = $('#cart-count'), checkout = $('#checkout');
+  var waMatch = (($('#wa-link') || {}).href || '').match(/wa\.me\/(\d+)/);
+  var waNumber = waMatch ? waMatch[1] : '';
+
+  function render() {
+    var n = 0, total = 0, html = '';
+    order.forEach(function (id) {
+      var it = cart[id];
+      n += it.qty; total += it.qty * it.price;
+      html += '<li class="line">' +
+        '<div class="line-info"><strong>' + it.name + '</strong><span>' + money.format(it.price) + ' cada</span></div>' +
+        '<div class="qty" role="group" aria-label="Quantidade de ' + it.name + '">' +
+          '<button type="button" data-act="dec" data-id="' + id + '" aria-label="Diminuir">−</button>' +
+          '<output>' + it.qty + '</output>' +
+          '<button type="button" data-act="inc" data-id="' + id + '" aria-label="Aumentar">+</button>' +
+        '</div>' +
+        '<div class="line-total">' + money.format(it.qty * it.price) + '</div></li>';
+    });
+    list.innerHTML = html;
+    list.hidden = n === 0;
+    empty.hidden = n > 0;
+    totalEl.textContent = money.format(total);
+    badge.textContent = n;
+    badge.hidden = n === 0;
+    var ok = n > 0;
+    checkout.setAttribute('aria-disabled', String(!ok));
+    if (ok) {
+      var msg = 'Olá, Império 2-A! Gostaria de fazer este pedido:\n' +
+        order.map(function (id) {
+          var it = cart[id];
+          return '- ' + it.qty + 'x ' + it.name + ' (' + money.format(it.qty * it.price) + ')';
+        }).join('\n') +
+        '\nTotal: ' + money.format(total);
+      checkout.href = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg);
+    } else {
+      checkout.removeAttribute('href');
+    }
+  }
+  function add(id, name, price) {
+    if (!cart[id]) { cart[id] = { name: name, price: price, qty: 0 }; order.push(id); }
+    cart[id].qty += 1;
+    render();
+  }
+  function change(id, d) {
+    var it = cart[id];
+    if (!it) return;
+    it.qty += d;
+    if (it.qty <= 0) { delete cart[id]; order = order.filter(function (x) { return x !== id; }); }
+    render();
+  }
+
+  var lastFocus = null;
+  function openCart() {
+    lastFocus = doc.activeElement;
+    drawer.classList.add('open'); scrim.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+    $('#cart-close').focus();
+  }
+  function closeCart() {
+    drawer.classList.remove('open'); scrim.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  $('#cart-btn').addEventListener('click', openCart);
+  $('#cart-close').addEventListener('click', closeCart);
+  scrim.addEventListener('click', closeCart);
+  $('#cart-shop').addEventListener('click', function () { closeCart(); setFilter('todos'); goProducts(); });
+  doc.addEventListener('keydown', function (e) { if (e.key === 'Escape' && drawer.classList.contains('open')) closeCart(); });
+  list.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-act]');
+    if (b) change(b.dataset.id, b.dataset.act === 'inc' ? 1 : -1);
+  });
+  checkout.addEventListener('click', function (e) {
+    if (checkout.getAttribute('aria-disabled') === 'true') e.preventDefault();
+  });
+
+  var toast = $('#toast'), tt;
+  function say(t) {
+    toast.textContent = t;
+    toast.classList.add('show');
+    clearTimeout(tt);
+    tt = setTimeout(function () { toast.classList.remove('show'); }, 1800);
+  }
+  $$('[data-add]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var c = btn.closest('.card');
+      add(c.dataset.id, c.dataset.name, parseFloat(c.dataset.price));
+      var lab = btn.querySelector('span');
+      lab.textContent = 'Adicionado';
+      btn.classList.add('done');
+      say(c.dataset.name + ' na sacola');
+      clearTimeout(btn._t);
+      btn._t = setTimeout(function () { lab.textContent = 'Comprar'; btn.classList.remove('done'); }, 1400);
+    });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
